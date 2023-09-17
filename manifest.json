@@ -1,0 +1,17 @@
+{
+    "orientation": "any", 
+    "name": "SparkList",
+    "short_name": "SparkList",
+    "description": "The best apprentice you'll ever hire",
+    "display": "standalone",
+    "background_color": "#222",
+    "theme_color": "#222",
+    "icons": [
+      {
+        "src": "{{ url_for('static', filename='icon512.png') }}", 
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

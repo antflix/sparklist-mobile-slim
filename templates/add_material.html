@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A Progressive Web App that autogenerates a material list based on user input.">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#030303">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+
+    <!-- Your custom stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+    <!-- Web App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+    <link rel="manifest" href="/static/icons/site.webmanifest">
+    <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/static/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <title>Create Project</title>
+
+    <!-- IE-specific stylesheets (conditionally loaded) -->
+    <!--[if IE]>
+    <link href="IEStyleSheet.css" rel="stylesheet">
+    <![endif]-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+   
+
+
+
+</head>
+
+<style>
+    .nav {
+        background-color: #4d4949;
+    }
+
+    .body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        padding-bottom: 15%;
+        text-align: center;
+    }
+
+    .body.dark-mode {
+        background-color: #1a1a1a;
+        color: #f5f5f5;
+    }
+
+    .tile {
+        display: inline-block;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .btn-container {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        text-align: center;
+    }
+
+    .dark-mode .btn-container {
+        background-color: #1a1a1a;
+        color: #473030;
+    }
+
+    .selected_job {
+        color: black;
+    }
+
+    .dark-mode .selected_job {
+        color: #62cd74;
+    }
+
+    .main-label {
+        color: black;
+        max-width: 95vw;
+    }
+
+    .dark-mode .main-label {
+        color: #ccc;
+    }
+
+    .custom-label {
+        color: black;
+    }
+
+    .dark-mode .custom-label {
+        color: rgb(86, 165, 234);
+    }
+
+    .input {
+        width: 40%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .input {
+        width: 40%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 2px solid #81f801;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .duplex {
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .dark-mode .duplex {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #0f62a7;
+
+    }
+
+    .quad {
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .dark-mode .quad {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #0fa79a;
+    }
+
+    .furniture-feeds {
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .dark-mode .furniture-feeds {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #8ea70f;
+    }
+
+    .data {
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .dark-mode .data {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #a7600f;
+
+    }
+
+    .switches {
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .dark-mode .switches {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #a7120f;
+    }
+
+    .floor-devices{
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .dark-mode .floor-devices {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #a70f68;
+    }
+
+    .instahots {
+        max-width: 95vw;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+    }
+
+    .dark-mode .instahots {
+        background-color: #333;
+        color: #f5f5f5;
+        border: 1px solid #6124ab;
+        margin-bottom: 40px;
+
+    }
+
+    /* Light/Dark Mode Toggle */
+    .mode-toggle {
+        text-align: center;
+        padding: 10px;
+        position: fixed;
+        /* Set to 'fixed' to position it relative to the viewport */
+        bottom: 120px;
+        /* Adjust this value to control the distance from the bottom */
+        right: 10px;
+        /* Adjust this value to control the distance from the right */
+        text-align: center;
+        padding: 10px;
+    }
+
+    .mode-toggle input[type="checkbox"] {
+        display: none;
+    }
+
+    .mode-toggle .toggle-label {
+        display: block;
+        width: 80px;
+        height: 40px;
+        background-color: #ccc;
+        border-radius: 10px;
+        cursor: pointer;
+        position: relative;
+        bottom: 4px;
+    }
+
+
+    .mode-toggle .toggle-label:before {
+        content: "";
+        position: absolute;
+        width: 40px;
+        height: 37px;
+        border-radius: 30%;
+        background-color: #fff;
+        top: 1.5px;
+        left: 1px;
+        transition: all 0.5s;
+        bottom: 5px;
+    }
+
+    .mode-toggle input[type="checkbox"]:checked+.toggle-label {
+        background-color: #007bff;
+    }
+
+    .mode-toggle input[type="checkbox"]:checked+.toggle-label:before {
+        transform: translateX(38px);
+    }
+
+    .mode-toggle .moon {
+        position: absolute;
+        bottom: 2px;
+        left: 4px;
+        color: #f5f5f5;
+        font-size: 30px;
+    }
+
+    .mode-toggle .sun {
+        position: absolute;
+        bottom: 2px;
+        left: 45px;
+        color: #ca6f00;
+        font-size: 30px;
+    }
+
+    .dark-mode .mode-toggle .sun {
+        display: none;
+    }
+
+    .gradient-line {
+        position: relative;
+        height: 3px;
+        width: 100%;
+    }
+
+    .gradient-line::before {
+        content: "";
+        position: absolute;
+        margin-bottom: 1px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgb(128, 122, 122);
+        size: 1px;
+    }
+
+    .dark-mode .gradient-line::before {
+        content: "";
+        position: absolute;
+        margin-top: -1px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, #0f62a7, #0fa79a, #8ea70f, #a7600f, #a7120f, #a70f68);
+        background-size: 300% 200%;
+        animation: gradientAnimation 10s linear infinite;
+    }
+
+    #tile-1 .slider {
+        display: inline-block;
+        width: 50%;
+        height: 4px;
+        border-radius: 3px;
+        background: linear-gradient(90deg, #21d262, #dd1f1f, #420ba9, #d221a3, #dd1f1f, #0ba98c);
+        background-size: 300% 200%;
+        animation: gradientAnimation 10s linear infinite;
+        position: absolute;
+        z-index: 1200;
+        bottom: 0;
+        transition: all .4s linear;
+
+    }
+
+
+    .btn-color-mode-switch {
+        display: inline-block;
+        margin: 0px;
+        position: relative;
+    }
+
+    .btn-color-mode-switch>label.btn-color-mode-switch-inner {
+        margin: 0px;
+        width: 180px;
+        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        background: #333333;
+        color: #ffffff;
+        border-radius: 26px;
+        overflow: hidden;
+        position: relative;
+        transition: all 0.3s ease;
+        display: block;
+    }
+
+    .btn-color-mode-switch>label.btn-color-mode-switch-inner:before {
+        content: attr(data-on);
+        position: absolute;
+        font-size: 16px;
+        font-weight: bold;
+        top: 7px;
+        right: 19px;
+    }
+
+    .btn-color-mode-switch>label.btn-color-mode-switch-inner:after {
+        content: attr(data-off);
+        width: 90px;
+        background: #616262;
+        border-radius: 26px;
+        position: absolute;
+        left: 3px;
+        top: 2px;
+        text-align: center;
+        transition: all 0.3s ease;
+        padding: 6px 0px;
+    }
+
+    .btn-color-mode-switch>.alert {
+        display: none;
+        background: #FF9800;
+        border: none;
+        color: #fefdfd;
+    }
+
+    .btn-color-mode-switch input[type="checkbox"] {
+        cursor: pointer;
+        width: 90px;
+        height: 25px;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        margin: 0px;
+    }
+
+    .btn-color-mode-switch input[type="checkbox"]:checked+label.btn-color-mode-switch-inner {
+        background: #333333;
+        color: #fffdfde9;
+    }
+
+    .btn-color-mode-switch input[type="checkbox"]:checked+label.btn-color-mode-switch-inner:after {
+        content: attr(data-on);
+        left: 88px;
+        background: #616262f5;
+    }
+
+    .btn-color-mode-switch input[type="checkbox"]:checked+label.btn-color-mode-switch-inner:before {
+        content: attr(data-off);
+        right: auto;
+        left: 10px;
+    }
+
+    .btn-color-mode-switch input[type="checkbox"]:checked~.alert {
+        display: block;
+    }
+
+    @keyframes gradientAnimation {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: 300% 0;
+        }
+    }
+
+
+    .forms-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+    .pure-button {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: rgb(28, 184, 65);
+    width: 100%; /* Make the button span the full width of the container */
+    display: block; /* Display the button as a block-level element */
+}
+</style>
+
+<body class="body bottom white-preview">
+    <div class="tile w3-xlarge" id="tile-1">
+        <!-- ===============================NAV TABS======================================================== -->
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <div class="slider"></div>
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                    aria-selected="true"><i class="fas fa-plug"></i> Walls</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                    aria-controls="profile" aria-selected="false"><i class="fas fa-lightbulb"></i> Ceilings</a>
+            </li>
+        </ul>
+ 
+        <form class="pure-form pure-form-aligned" method="POST"
+            action="{{ url_for('add_material', project_id=project.id) }}">
+              <!-- ===============================WALLS=========================================================== -->
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="background" style="color: #fffdfde9">
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+                    <!-- Bootstrap CSS -->
+                    <link rel="stylesheet"
+                        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+                        crossorigin="anonymous">
+
+                    <link rel='stylesheet'
+                        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
+                    <!-- Font Awesome CSS -->
+                    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'>
+                    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+                    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+                    <meta name="description"
+                        content="A Progressive Web App that autogenerates a material list based on user input.">
+                    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+                    <link rel="icon" sizes="512x512" href="{{ url_for('static', filename='MLM3000.png') }}">
+                    <meta name="theme-color" content="#030303">
+                    <link rel="manifest" href="manifest.json">
+                    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                    <h2 class="selected_job">
+                        {{ project.name }}
+                    </h2>
+                    <div class="tab-content">
+                        <div class="btn-container w3-center" style="color:#fffdfde9; margin-top:20px;">
+                            <img src="/static/standard.png" class="standard-icon"
+                                style=" position: relative;top: -14px; right:-5px;" width="36" height="36" alt="Icon">
+                            <label class="switch btn-color-mode-switch">
+                                <input type="checkbox" name="outlet_type" id="color_mode" value="1">
+                                <label for="color_mode" data-on="Decora" data-off="Standard"
+                                    class="btn-color-mode-switch-inner"></label>
+                            </label>
+                            <img src="/static/decoras.png" class="decora-icon"
+                                style="position: relative;top: -14px; right:5px;" width="36" height="36" alt="Icon">
+                        </div>
+
+
+                        <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+                            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+                            crossorigin="anonymous"></script>
+                        <script type="text/javascript" src="script.js"></script>
+                        
+                        {% for category, labels in categories.items() %}
+                        <details class="{{ category|lower }}" id="{{ category|lower }}outlets">
+                            <summary>
+                                <i class="fa fa-info-circle" aria-hidden="true"></i><i class="main-label">{{ category
+                                    }}</i>
+                                <span class="w3-text-orange" id="{{ category|lower }}Total"></span><br>
+                            </summary>
+                            <div class="pure-control-group category-container">
+                                <h3>{{ category }}</h3>
+                                {% for label in labels %}
+                                <label for="{{ label.name }}">{{ label.name }}:</label>
+                                <input type="number" id="{{ label.name }}" name="{{ label.name }}"
+                                    placeholder="0" /><br>
+                                {% endfor %}
+                            </div>
+                        </details>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mode-toggle">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <label class="toggle-label" for="dark-mode-toggle">
+                        <i class="moon">&#9790;</i>
+                        <i class="sun">&#9728;</i>
+                    </label>
+                </div>
+            </div>
+            <!--=========================================CEILINGS======================================================== -->
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="ceilings">
+
+                </div>
+
+            </div>
+            <div class="forms-container">
+    <input type="submit" value="Generate" class="pure-button pure-button-primary">
+    </div>
+    </form>
+  
+        <!--===========================================NAV TABS FUNCTION=============================================== -->
+        <!-- jQuery JS -->
+        <script>
+            $(document).ready(function () {
+
+                $("#tile-1 .nav-tabs a").click(function () {
+
+                    var position = $(this).parent().position();
+
+                    var width = $(this).parent().width();
+
+                    $("#tile-1 .slider").css({ "left": + position.left, "width": width });
+
+                });
+                var actWidth = $("#tile-1 .nav-tabs").find(".active").parent("li").width();
+
+                var actPosition = $("#tile-1 .nav-tabs .active").position();
+
+                $("#tile-1 .slider").css({ "left": + actPosition.left, "width": actWidth });
+
+            });
+
+            ///////////////////////////////////////// TOGGLE SWITCH FUNCTIONS //////////////////////////////////////////////
+            function colorModePreview(ele) {
+                var value = $(ele).prop("checked") ? "Decora" : "Standard";
+                $('body').toggleClass('dark-preview', $(ele).prop("checked"));
+                $('body').toggleClass('white-preview', !$(ele).prop("checked"));
+
+                // AJAX request to send the value to the server
+                $.ajax({
+                    type: "POST",
+                    url: "/update-color-mode",
+                    data: { color_mode: value },
+                    success: function (response) {
+                        console.log(response); // Handle the server response if needed
+                    },
+                    error: function (error) {
+                        console.log(error); // Handle the error if the request fails
+                    }
+                });
+            }
+            //////////////////////////////////////////// TOGGLE DEFAULT AND VALUE FUNCTIONS //////////////////////////////////////////
+            $(document).ready(function () {
+                // Get the initial value of the toggle switch
+                var initialValue = $("#color_mode").prop("checked");
+
+                // Set the default value and trigger the colorModePreview function
+                if (initialValue) {
+                    $('body').addClass('dark-preview');
+                    $('body').removeClass('white-preview');
+                } else {
+                    $('body').addClass('white-preview');
+                    $('body').removeClass('dark-preview');
+                }
+
+                // Trigger the colorModePreview function with the initial value
+                colorModePreview($("#color_mode"));
+
+                // Bind the change event to the toggle switch
+                $("#color_mode").on("change", function () {
+                    colorModePreview(this);
+                });
+            });
+
+
+            $(document).ready(function () {
+                // Get the initial value of the toggle switch
+                var initialValue = $("#color_mode").prop("checked");
+
+                // Set the default value and trigger the colorModePreview function
+                if (initialValue) {
+                    $('body').addClass('dark-preview');
+                    $('body').removeClass('white-preview');
+                } else {
+                    $('body').addClass('white-preview');
+                    $('body').removeClass('dark-preview');
+                }
+
+                $("#tile-1 .nav-tabs a").click(function () {
+                    var position = $(this).parent().position();
+                    var width = $(this).parent().width();
+                    $("#tile-1 .slider").css({ "left": + position.left, "width": width });
+                });
+
+                var actWidth = $("#tile-1 .nav-tabs").find(".active").parent("li").width();
+                var actPosition = $("#tile-1 .nav-tabs .active").position();
+                $("#tile-1 .slider").css({ "left": + actPosition.left, "width": actWidth });
+
+                function colorModePreview(ele) {
+                    var value = $(ele).prop("checked") ? "Decora" : "Standard";
+                    $('body').toggleClass('dark-preview', $(ele).prop("checked"));
+                    $('body').toggleClass('white-preview', !$(ele).prop("checked"));
+
+                    // AJAX request to send the value to the server
+                    $.ajax({
+                        type: "POST",
+                        url: "/update-color-mode",
+                        data: { color_mode: value },
+                        success: function (response) {
+                            console.log(response); // Handle the server response if needed
+                        },
+                        error: function (error) {
+                            console.log(error); // Handle the error if the request fails
+                        }
+                    });
+                }
+
+                // Trigger the colorModePreview function with the initial value
+                colorModePreview($("#color_mode"));
+
+                // Bind the change event to the toggle switch
+                $("#color_mode").on("change", function () {
+                    colorModePreview(this);
+                });
+            });
+
+
+            // Function to check if dark mode is preferred by the user or operating system
+            function isDarkModePreferred() {
+                // Check if dark mode is enabled via cookies or local storage
+                // Use local storage if preferred, otherwise fall back to operating system preference
+                const darkModePreference = localStorage.getItem('darkModePreference');
+                return darkModePreference === 'dark' || (darkModePreference === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            }
+
+            // Apply dark mode on page load if preferred
+            if (isDarkModePreferred()) {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Dark mode toggle functionality
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            darkModeToggle.addEventListener('change', () => {
+                if (darkModeToggle.checked) {
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('darkModePreference', 'dark'); // Store preference in local storage
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    localStorage.setItem('darkModePreference', 'light'); // Store preference in local storage
+                }
+            });
+        </script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        <!-- Bootstrap JS -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js'></script>
+        <script type="text/javascript"></script>
+        <script src="static/index.js"></script>
+
+
+</body>
+
+</html>

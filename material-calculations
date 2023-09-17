@@ -1,0 +1,521 @@
+# Initialize accumulated_materials as an empty dictionary
+from collections import OrderedDict
+from app import *
+accumulated_materials = {}
+color_mode = ""
+
+def toggle_value(mode):
+    global color_mode
+    color_mode = mode
+    print(color_mode)
+
+def order():
+    final_materials = OrderedDict()
+    zero = 0
+    # Loop through the items in item_dict and add their quantities from accumulated_materials
+    for item, quantity in item_dict.items():
+        # Get the quantity from accumulated_materials, if present, else default to 0
+        quantity_from_accumulated = accumulated_materials.get(item, 0)
+        # Add the item and quantity to the final_materials dictionary
+        if quantity_from_accumulated != zero:
+            final_materials[item] = quantity_from_accumulated
+    return final_materials
+
+
+material_requirements = {
+    'Bracket Box Duplex': {
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 1,
+        'Red Heads': 2,
+        'Double Barrel MC Connector': 1,
+        '12/2 LV MC': 30,
+        'KX Straps': 2,
+        color_mode + ' Outlet': 1,
+        'Single Gang ' + color_mode + ' Outlet Cover Plate': 1
+    },
+
+    'GFCI': {
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 1,
+        'Red Heads': 2,
+        'Single Barrel MC Connector': 1,
+        'NVent Caddy Mounting Slider Bracket': 1,
+        '12/2 LV MC': 30,
+        'KX Straps': 2,
+        'GFCI Outlet': 1
+    },
+
+    'Cut-In'  : {
+
+        '4-Square Bracket Box': 1,     
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 1,
+        'Red Heads': 2,
+        'Single Barrel MC Connector': 1,
+        'NVent Caddy Mounting Slider Bracket': 0,
+        '12/2 LV MC': 30,
+        'KX Straps': 2,
+        color_mode + ' Outlet': 1,
+        'Single Gang ' + color_mode + ' Outlet Cover Plate': 1,
+        'Cut-In Box': 1,
+        'Drywall Clamps': 1
+    },
+
+    'Surface Mounted': {
+
+        '4-Square Box': 2,
+        'Single Gang ' + color_mode + ' Industrial Cover Plug Plate': 1,
+        '4-Square Cover': 1,
+        'Ground Stinger': 2,
+        '1/4” Toggle Bolts': 6,
+        '1/2" EMT': 10,
+        '1/2" EMT Connectors': 2,
+        '1/2" One Hole Strap': 2,
+        'Double Barrel MC Connector': 2, 
+        'Red Heads': 2 ,
+        'Red/Yellow Wire Nuts': 6,
+        'Mac-2 Straps': 1,
+        'KX Straps': 2,
+        '#12 THHN Black Wire': 15,
+        '#12 THHN White Wire': 15,
+        '#12 THHN Green Wire': 15,
+        color_mode + ' Outlet': 1,
+    },
+
+    'Controlled': {
+
+        'Deep 4-Square Bracket Box': 2,
+        'Single Gang Mud Ring': 1,
+        'Ground Stinger': 2,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 3,
+        'Red/Yellow Wire Nuts': 5,
+        'Red Heads': 4,
+        'Double Barrel MC Connector': 1,
+        'Single Barrel MC Connector': 2,
+        'NVent Caddy Mounting Slider Bracket': 2,
+        '12/2 LV MC': 20,
+        '12/3 LV MC': 10,
+        'Half-Duplex Controlled ' + color_mode + ' Outlet': 1,
+        'Single Gang ' + color_mode + ' Outlet Cover Plate': 1,
+    },
+
+
+
+    # ----------------------------------------------------------------------
+
+    'Quad Bracket Box': {
+
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 1,
+        'Red Heads': 2,
+        'Double Barrel MC Connector': 1,
+        '12/2 LV MC': 30,
+        'KX Straps': 2,
+        color_mode + ' Outlet': 2,
+        'Two Gang ' + color_mode + ' Outlet Cover Plate': 1,
+    },
+        
+
+    # def calc_quad_decora: {
+    #     global accumulated_materials, color_mode
+    #     quantity = int(quantity)  # Convert the quantity to an integer
+    #     if quantity != 0:
+    #         materials = {
+    #           '4-Square Bracket Box': 1,
+    #           'Single Gang Mud Ring': 1,
+    #           'Ground Stinger': 1,
+    #           'Tek Screws': 10,
+    #           'Mac-2 Straps': 4,
+    #           'Red/Yellow Wire Nuts': 1,
+    #           'Red Heads': 2,
+    #           'Double Barrel MC Connector': 1,
+    #           'NVent Caddy Mounting Slider Bracket': 0,
+    #           '12/2 LV MC': 30,
+    #           'KX Straps': 2,
+    #           'Decora Outlet': 2,
+    #           'Two Gang Decora Outlet Cover Plate': 1,
+    #         }
+    #         # Update accumulated_materials with the quantities from materials
+    #         for item, quantity in materials.items():
+    #             accumulated_materials[item] = accumulated_materials.get(item, 0) + quantity
+
+    'Quad GFCI': {
+
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 1,
+        'Red Heads': 2,
+        'Double Barrel MC Connector': 1,
+        'NVent Caddy Mounting Slider Bracket': 1,
+        '12/2 LV MC': 30,
+        'KX Straps': 2,
+        'GFCI Outlet': 2,
+        'Two Gang ' + color_mode + ' Outlet Cover Plate': 1,
+    },
+
+    'Quad Cut-in'  : {
+
+        'Ground Stinger': 1,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 1,
+        'Red Heads': 2,
+        'Double Barrel MC Connector': 1,
+        'Single Barrel MC Connector': 2,
+        '12/2 LV MC': 30,
+        'KX Straps': 2,
+        color_mode + ' Outlet': 2,
+        'Single Gang ' + color_mode + ' Outlet Cover Plate': 1,
+        'Cut-In Box': 2,
+        'Drywall Clamps': 1
+    },
+
+    'Quad Surface Mounted' :{
+
+        '4-Square Box': 2,
+        '2 Gang ' + color_mode + ' Industrial Cover Plug Plate': 1,
+        '4-Square Cover': 1,
+        'Ground Stinger': 2,
+        '1/4” Toggle Bolts': 6,
+        '1/2" EMT': 10,
+        '1/2" EMT Connectors': 2,
+        '1/2" One Hole Strap': 2,
+        'Double Barrel MC Connector': 2, 
+        'Red Heads': 2 ,
+        'Red/Yellow Wire Nuts': 6,
+        'KX Straps': 2,
+        '#12 THHN Black Wire': 15,
+        '#12 THHN White Wire': 15,
+        '#12 THHN Green Wire': 15,
+        color_mode + ' Outlet': 2,
+    },
+
+    'Quad Controlled': {
+
+        'Deep 4-Square Bracket Box': 2,
+        'Two Gang Mud Ring': 1,
+        'Ground Stinger': 2,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 6,
+        'Red/Yellow Wire Nuts': 5,
+        'Red Heads': 4,
+        'Double Barrel MC Connector': 1,
+        'Single Barrel MC Connector': 2,
+        'NVent Caddy Mounting Slider Bracket': 3,
+        '12/2 LV MC': 20,
+        '12/3 LV MC': 10,
+        'Full-Duplex Controlled ' + color_mode + ' Outlet': 1,
+        'Single Gang ' + color_mode + ' Outlet Cover Plate': 1,
+    },
+
+    # -------------------------------------------------------------------------
+
+    '3wire Furniture Feed': {
+
+        '4-Square Bracket Box': 1,
+        'Two Gang Mud Ring': 1,
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 8,
+        'Red Heads': 1,
+        'Single Barrel MC Connector': 1,
+        '12/3 LV MC': 30,
+        'Two Gang Stainless Steel Blank Plate': 1,
+        '90 Degree 1/2" Flex Connector': 1,
+    },
+
+    '4wire Furniture Feed': {
+
+        '4-Square Bracket Box': 1,
+        'Two Gang Mud Ring': 1,
+        'Ground Stinger': 1,
+        'Tek Screws': 10,
+        'Mac-2 Straps': 4,
+        'Red/Yellow Wire Nuts': 8,
+        'Red Heads': 4,
+        'Double Barrel MC Connector': 2,
+        '12/3 LV MC': 30,
+        'Two Gang Stainless Steel Blank Plate': 1,
+        '90 Degree 1/2" Flex Connector': 1,
+        'NVent Caddy Mounting Slider Bracket': 1,
+    },
+
+    'Bracket Box Data': {
+
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        'Tek Screws': 4,
+        'Jet Line': 10,
+        '3/4” Snap-In Bushings': 1,
+        '1" Snap-In Bushings': 1,
+    },
+
+    'Cut-in Data': {
+
+        'LV1s': 1,
+        'Jet Line': 10,
+    },
+
+   'Line-Voltage Dimming Switch': {
+
+        '12/3 HV MC': 10,
+        'Ground Stinger': 1,
+        'Single Barrel MC Connector': 1,
+        'Deep 4-Square Bracket Box': 1,
+        'Double Barrel MC Connector': 2,
+        'Red Heads': 5,
+        'Red/Yellow Wire Nuts': 8,
+        '18/2 LV Dimmer Cable': 15,
+        'Blue/Orange Wire Nuts': 2,
+        '4-Square Cover': 1, 
+        'Cut-In Box': 1,
+        'Drywall Clamps': 1  
+    },
+   
+   
+    'Line-Voltage Dimming': {
+
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        '12/3 HV MC': 10,
+        'Mac-2 Straps': 3,
+        'Ground Stinger': 1,
+        'Single Barrel MC Connector': 1,
+        'Deep 4-Square Bracket Box': 1,
+        'Double Barrel MC Connector': 2,
+        'Red Heads': 1,
+        'Tek Screws': 6,
+        'Red/Yellow Wire Nuts': 3,
+        '18/2 LV Dimmer Cable': 15,
+        'Blue/Orange Wire Nuts': 2,
+    },
+
+    'LV/Cat5 Switch': {
+
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        'Jet Line': 10,
+        '3/4” Snap-In Bushings': 1,
+        'Deep 4-Square Bracket Box': 1,
+        'Double Barrel MC Connector': 2,
+        'Tek Screws': 6,
+        'KX Straps': 4,
+        '4-Square Cover': 1,
+        'Ground Stinger': 1,
+        'Red/Yellow Wire Nuts': 1,
+        '12/2 HV MC': 15,
+        'Ceiling Wires': 1,
+    },
+
+
+
+    'Lv/Cat5 Cut-in': {
+
+        'Jet Line': 10,
+        'LV1s': 1,
+        'Deep 4-Square Bracket Box': 1,
+        'Double Barrel MC Connector': 2,
+        'Tek Screws': 3,
+        'KX Straps': 4,
+        '4-Square Cover': 1,
+        'Ground Stinger': 1,
+        'Red/Yellow Wire Nuts': 5,
+        '12/2 HV MC': 15,
+        'Ceiling Wires': 1,
+    },
+
+    'Line-Voltage Switch': {
+
+        '4-Square Bracket Box': 1,
+        'Single Gang Mud Ring': 1,
+        '12/3 HV MC': 10,
+        'Mac-2 Straps': 3,
+        'Ground Stinger': 2,
+        'Deep 4-Square Bracket Box': 1,
+        'Double Barrel MC Connector': 2,
+        'Single Barrel MC Connector': 1,
+        'Red Heads': 1,
+        'Tek Screws': 6,
+        'Red/Yellow Wire Nuts': 3,
+        
+    },
+
+    'Line-Voltage Cut-in': {
+
+        '12/3 HV MC': 10,
+        'Ground Stinger': 2,
+        'Deep 4-Square Bracket Box': 1,
+        '4-Square Cover': 1,
+        'Double Barrel MC Connector': 2,
+        'Single Barrel MC Connector': 1,
+        'Red Heads': 5,
+        'Red/Yellow Wire Nuts': 8,
+        'Cut-In Box': 1,
+        'Drywall Clamps': 1         
+    },
+
+    '6in Floor Device': {
+
+        '10ft Pices of 2" EMT **May need adjusting per floor device specs**': 1,
+        '2" EMT Coupling **May need adjusting per floor device specs**': 1,
+        '2" EMT to Flex Change Over **May need adjusting per floor device specs**': 2,
+        '2" 90° Elbow **May need adjusting per floor device specs**': 1,
+        '10ft Pieces of 2" Flex **May need adjusting per floor device specs**': 1,
+        '2" Insulating Push On Conduit Bushing **May need adjusting per floor device specs**': 1,
+        '2" Min Strap **May need adjusting per floor device specs**': 5,
+        'Tube of Fire Cock **May need adjusting per floor device specs**': 1,
+        'Jet Line': 30,
+        'Multifuction Clip w/ nut or bolt': 2,
+        '6" Floor Device ***Per Print***': 1,
+        'Floor Device to Flex Converter ***Per Print***': 10,
+        '1/2" Panhead Selftapper': 5,
+        'Mac-2 Straps': 3,
+        'Red/Yellow Wire Nuts': 8,
+        'Red Heads': 2,
+        'Single Barrel MC Connector': 2,
+        '12/2 LV MC': 30,
+        '4-Square Bracket Box': 1,
+        '4-Square Cover': 1, 
+        'KX Straps': 5,
+                    
+    },
+
+    '4in Floor Device': {
+
+        'Tube of Fire Cock **May need adjusting per floor device specs**': 1,
+        '4" Floor Device ***Per Print***': 1,
+        'Mac-2 Straps': 3,
+        'Red/Yellow Wire Nuts': 8,
+        'Red Heads': 2,
+        'Single Barrel MC Connector': 2,
+        '12/2 LV MC': 30,
+        '4-Square Bracket Box': 1,
+        '4-Square Cover': 1, 
+        'KX Straps': 5,
+                    
+    },
+                        
+
+    '2-pole 208V 40A Instahot': {
+
+        '3/4" MC Connector': 4,
+        'Deep 4-Square Box': 1,
+        '4-Square Industrial Switch Cover Plate': 1,
+        '1/2" One Hole Strap': 3,
+        'Big Blue Wire Nuts': 4,
+        'Two-Pole Motor Rated 40A Switch': 1,
+        '8/3 LV MC': 30,
+    },
+
+    'Single-Pole 277V 30A Instahot': {
+
+        '3/4" MC Connector': 4,
+        'Deep 4-Square Box': 1,
+        '4-Square Industrial Switch Cover Plate': 1,
+        '1/2" One Hole Strap': 3,
+        'Big Blue Wire Nuts': 4,
+        'Single-Pole Motor Rated 30A Switch': 1,
+        '10/2 HV MC': 30,
+    }
+
+    
+        
+   
+}
+
+
+
+# Define the ordered dictionary with the items
+item_dict = OrderedDict([
+    ('Single Gang Mud Ring', 0),
+    ('Two Gang Mud Ring', 0),
+    ('4-Square Bracket Box', 0),
+    ('Deep 4-Square Bracket Box', 0),
+    ('4-Square Box', 0),
+    ('Deep 4-Square Box', 0),
+    ('4-Square Cover', 0),
+    ('Cut-In Box', 0),
+    ('Drywall Clamps', 0),
+    ('NVent Caddy Mounting Slider Bracket', 0),
+    ('12/2 LV MC', 0),
+    ('12/3 LV MC', 0),
+    ('12/2 HV MC', 0),
+    ('12/3 HV MC', 0),
+    ('10/2 HV MC', 0),
+    ('8/3 LV MC', 0),
+    ('18/2 LV Dimmer Cable', 0),
+    ('Single Barrel MC Connector', 0),
+    ('Double Barrel MC Connector', 0),
+    ('Ground Stinger', 0),
+    ('Tek Screws', 0),
+    ('1/2" Panhead Selftapper', 0),
+    ('Mac-2 Straps', 0),
+    ('Red Heads', 0),
+    ('Red/Yellow Wire Nuts', 0),
+    ('Blue/Orange Wire Nuts', 0),
+    ('Big Blue Wire Nuts', 0),
+    ('Jet Line', 0),
+    ('3/4” Snap-In Bushings', 0),
+    ('1" Snap-In Bushings', 0),
+    ('Single Gang LV1s', 0),
+    ('10ft Pieces of 2" EMT **May need adjusting per floor device specs**', 0),
+    ('2" EMT Coupling **May need adjusting per floor device specs**', 0),
+    ('2" EMT to Flex Change Over **May need adjusting per floor device specs**', 0),
+    ('2" 90° Elbow **May need adjusting per floor device specs**', 0),
+    ('10ft Pieces of 2" Flex **May need adjusting per floor device specs**', 0),
+    ('2" Insulating Push On Conduit Bushing **May need adjusting per floor device specs**', 0),
+    ('2" Min Strap **May need adjusting per floor device specs**', 0),
+    ('Tube of Fire Cock **May need adjusting per floor device specs**', 0),
+    ('1/4” Toggle Bolts', 0),
+    ('1/2" EMT', 0),
+    ('1/2" EMT Connectors', 0),
+    ('1/2" One Hole Strap', 0),
+    ('#12 THHN Black Wire', 0),
+    ('#12 THHN White Wire', 0),
+    ('#12 THHN Green Wire', 0),
+    ('Standard Outlet', 0),
+    ('Decora Outlet', 0),
+    ('GFCI Outlet', 0),
+    ('Half-Duplex Controlled Standard Outlet', 0),
+    ('Half-Duplex Controlled Decora Outlet', 0),
+    ('Full-Duplex Controlled Standard Outlet', 0),
+    ('Full-Duplex Controlled Decora Outlet', 0),
+    ('Single-Pole Motor Rated 30A Switch', 0),
+    ('Two-Pole Motor Rated 40A Switch', 0),
+    ('Single Gang Standard Outlet Cover Plate', 0),
+    ('Single Gang Decora Outlet Cover Plate', 0),
+    ('Two Gang Standard Outlet Cover Plate', 0),
+    ('Two Gang Decora Outlet Cover Plate', 0),
+    ('4-Square Industrial Switch Cover Plate', 0),
+    ('Single Gang Standard Industrial Cover Plug Plate', 0),
+    ('Single Gang Decora Industrial Cover Plug Plate', 0),
+    ('2 Gang Standard Industrial Cover Plug Plate', 0),
+    ('2 Gang Decora Industrial Cover Plug Plate', 0),
+    ('3/4" MC Connector', 0),
+    ('Two Gang Stainless Steel Blank Plate', 0),
+    ('90 Degree 1/2" Flex Connector', 0),
+    ('4" Floor Device ***Per Print***', 0),
+    ('6" Floor Device ***Per Print***', 0),
+    ('Floor Device to Flex Converter ***Per Print***', 0),
+    ('Multifunction Clip w/ nut or bolt', 0),
+    ('KX Straps', 0),
+    ('Ceiling Wires', 0),
+])

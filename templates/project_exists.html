@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+{% extends 'base.html' %}
+
+{% block styles %}
+{{ super() }}
+<!-- Additional styles specific to create_project.html -->
+<style>
+    /* Additional styles for create_project.html */
+    /* You can override or add styles here */
+</style>
+{% endblock %}
+
+{% block content %}
+    <title>Project Already Exists</title>
+</head>
+<body>
+    <p>This project already has an active job folder.</p>
+    <p>What would you like to do?</p>
+   
+    <a href="{{ url_for('test', project_id=project_id) }}">View Project</a>
+    
+    <form method="GET" action="{{ url_for('create_project') }}">
+        <button type="submit">Select Different Project</button>
+    </form>
+{% endblock %}
