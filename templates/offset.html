@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">    
+<style>
+    /* Center the form horizontally and add some spacing */
+    .bend {
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    form {
+        text-align: center;
+    }
+     
+    .diagram-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .diagram-container img {
+        width: 100%;
+        height: auto;
+    }
+
+
+    .offset-depth {
+        position: absolute;
+        top: 52%;
+        left: 85.7%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw; /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333; /* Adjust the background color and opacity as desired */
+        padding: 0.8rem;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .offset-angle {
+        position: absolute;
+        top: 72%;
+        left: 63%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw; /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333; /* Adjust the background color and opacity as desired */
+        padding: 0.5rem;
+    }
+    .offset-distance {
+        position: absolute;
+        top: 54%;
+        left: 36%;
+        transform: translate(-50%, -50%);
+        transform: rotate(-45deg);
+        font-size: 3.4vw; /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333; /* Adjust the background color and opacity as desired */
+        margin-bottom: 1px;
+    }
+    .conduit_shrinkage {
+        position: absolute;
+        top: 15%;
+        left: 90%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw; /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333; /* Adjust the background color and opacity as desired */
+        padding: 0.5rem;
+    }
+    p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 2.5vw; /* Adjust this value to control the font size */
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="w3-main" style="background-color: #333; color:white; width:100vw;">
+    <div class="dropdown">
+        <button class="btn btn-bar dropdown-toggle" type="button" id="menu1" data-toggle="dropdown"
+            style="width:95vw; background-color: #4e4e4e; color: white; ; border: 3px grey solid; border-bottom: 2px rgb(0, 87, 128) solid; margin:10px;">Bend Options
+            </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="width:100vw; background-color: #4e4e4e; color: white;">
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1" href="#">HTML</a></li>
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1" href="#">CSS</a></li>
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+            <li role="presentation" style="color: rgb(53, 105, 184);" class="divider"></li>
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1" href="{{ url_for('offset') }}"><i class="fas fa-home"></i> Home</a></li> fahom
+        </ul>
+    </div>
+
+    <form method="POST" action="/offset">
+        <h2>Offset</h2>
+        <div class="row justify-content-center align-items-center g-2 mar" style="margin:5px;">
+            <div class="col">
+                <div class="mb-3">
+                    <select class="form-select form-select-lg" name="offset_depth" id="depth" style="background-color: #222; color: grey;">
+                        <option selected>Offset Height</option>
+                        {% for i in range(0, 201, 1) %}
+                            <option value="{{ i/4 }}">{{ i/4 }}"</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <select class="form-select form-select-lg" name="offset_angle" id="degree" style="background-color: #222; color: grey">
+                        <option selected>Offset Angle</option>
+                        <option value="10">10°</option>
+                        <option value="22.5">22.5°</option>
+                        <option value="30">30°</option>
+                        <option value="45">45°</option>
+                        <option value="60">60°</option>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+              
+        <div class="diagram-container w3-responsive" >
+            <img src="{{ url_for('static', filename=picture) }}" alt="Offset Image">
+ 
+            <span class="offset-depth">{{ offset_depth }}</span>
+            <span class="offset-angle">{{ offset_angle }}</span>
+            <span class="offset-distance">{{ distance_between_bends }}</span>
+            <span class="conduit_shrinkage">{{ conduit_shrinkage }}</span>
+
+        </div>
+    
+     
+
+
+
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Rise: {{ offset_depth | safe}}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Offset Angle: {{ offset_angle }}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Distance Between Marks on Pipe: {{ distance_between_bends | safe}}</p>
+        <p  style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Conduit Shrinkage: {{ conduit_shrinkage | safe}}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; "                    >{{ offset_depth_mixed | safe}}</p>
+
+      
+        <button type="submit" name="offset" id="offset" class="btn btn-primary">Submit</button>
+       
+        <!-- <input type="submit" value="Calculate"> -->
+    </form>
+
+</div>
+{% endblock %}
+
+

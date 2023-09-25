@@ -6,6 +6,9 @@ from flask import Flask, Response, abort, flash, make_response, render_template,
 from flask_sqlalchemy import SQLAlchemy
 from openpyxl import load_workbook
 from sqlalchemy.exc import IntegrityError
+from fractions import Fraction
+from flask import Markup
+
 
 app = Flask(__name__)
 config = app.config
@@ -84,14 +87,16 @@ def home():
     return render_template('index.html', project_id=project_id)
 
 
+@app.route('/bending-calculator', methods=['GET', 'POST'])
+def bending_calculator():
+    return render_template('bending-calculator.html')
 
-@app.route('/bending', methods=['GET', 'POST'])
-def bending():
-    offset_angle = 45
-    offset_depth = 30
-    x2_line2 = 100
-    x1_line3 = 100
+@app.route('/offset', methods=['GET', 'POST'])
+def offset():
+
+    picture='offset-labled.png'
     if request.method == 'POST':
+        picture='offset-labled-blank.png'
         # Define a dictionary of degree multipliers
         degree_multipliers = {
             10: 6,
@@ -108,17 +113,17 @@ def bending():
             45: 3 / 8,
             60: 1 / 2
         }
-
-        # Get the selected degree from the form
         offset_angle = float(request.form['offset_angle'])
 
-        # Calculate the x2 values based on the degree multiplier
-        x2_line2 = 50 + 50 * degree_multipliers[offset_angle]
-        x1_line3 = 50 + 50 * degree_multipliers[offset_angle]
+        # Get the selected degree from the form
+        if offset_angle != 22.5:
+            offset_angle = int(float(request.form['offset_angle']))
+        else:
+            offset_angle = offset_angle      
 
         offset_depth = float(request.form['offset_depth'])  # User-provided offset depth
         shrinkage = offset_depth * math.tan(offset_angle)
-
+        
         if offset_angle in degree_multipliers:
             offset_depth_multiplier = degree_multipliers[offset_angle]
             distance = offset_depth_multiplier * offset_depth
@@ -133,13 +138,36 @@ def bending():
             # Handle cases where the offset angle is not in the dictionary
             shrinkage = None  # You can define a default value or handle it differently
 
-        # Render a results page with the calculated values
-        return render_template('bending.html',  x2_line2=x2_line2, x1_line3=x1_line3, offset_angle=offset_angle,
-                               offset_depth=offset_depth, distance_between_bends=distance, conduit_shrinkage=shrinkage,
+        # Round decimal values to 1/8th inch increments and convert to mixed fractions
+        offset_depth_rounded= decimal_to_mixed_fraction(round_to_eighth(offset_depth))
+        distance_rounded = decimal_to_mixed_fraction(round_to_eighth(distance))
+        shrinkage_rounded = decimal_to_mixed_fraction(round_to_eighth(shrinkage))
+        degree = f"{offset_angle}°"
+
+        return render_template('offset.html', picture=picture, offset_angle=degree, Fraction=Fraction,
+                               offset_depth=offset_depth_rounded, distance_between_bends=distance_rounded, conduit_shrinkage=shrinkage_rounded,
                                math=math)
-    return render_template('bending.html',  x2_line2=x2_line2, x1_line3=x1_line3, offset_angle=offset_angle, offset_depth=offset_depth, math=math)
+    offset_depth_mixed = None
+    return render_template('offset.html', picture=picture, math=math, offset_depth_mixed=offset_depth_mixed)
 
+def round_to_eighth(number):
+    rounded = round(number * 8) / 8
 
+    return rounded
+
+def decimal_to_mixed_fraction(decimal):
+    whole_number = int(decimal)
+    fraction = Fraction(decimal - whole_number).limit_denominator()
+    if whole_number >= 1:
+        if int(decimal) == decimal:
+            mixed_fraction = Markup(f"{whole_number}\"")
+        else:
+            mixed_fraction = Markup(f"{whole_number}<sup>{fraction.numerator}</sup>&frasl;<sub>{fraction.denominator}</sub>\"")
+    
+    else:
+        mixed_fraction = Markup(f"<sup>{fraction.numerator}</sup>&frasl;<sub>{fraction.denominator}</sub>\"")
+    return mixed_fraction
+    
 def order(dict):
     final_materials = OrderedDict()
     zero = 0

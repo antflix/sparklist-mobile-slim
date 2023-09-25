@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+{{ super() }}
+    <meta charset="utf-8">
+    <title>Dark Mode Landing Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Dark mode styles */
+        body {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* Mobile-first styles */
+        .container {
+            max-width: 100%;
+            padding: 20px;
+        }
+
+        .card {
+            width: 90vw;
+            background-color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background-color: #444;
+        }
+
+        .card-body img {
+            width: 80%;
+            height: auto;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-divider {
+            width: 90%;
+            height: 1px;
+            background-color: #c0c0c0;
+            margin-top: 5px;
+        }
+
+        .card-title {
+            margin-top: 15px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <a href="{{ url_for('offset') }}">
+
+        <div class="card" style=" border: 2px solid #108f7c">
+
+            <div class="card-body"><img src="static/offset-labled.png" alt="Offset Image" class="card-img-top"style="width: 95%;"></div>
+            <div class="card-divider"></div>
+            <h1 class="card-footer " style="background-color: #888; color:rgb(0, 123, 255);">Offset</h1>
+        </div>
+       </a>
+
+    </div>
+
+    <div class="container">
+        <div class="card" style=" border: 2px solid #8f7a10">
+            <div class="card-body"><img src="static/4-point-labeled-white.png" alt="Offset Image" class="card-img-top"style="width: 95%;"></div>
+            <div class="card-divider"></div>
+            <h1 class="card-footer " style="background-color: #888; color:rgb(0, 123, 255);">4-Point Saddle</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card" style=" border: 2px solid #a75414">
+            <div class="card-body"><img src="static/3-point-labeled.png" alt="Offset Image" class="card-img-top"style="width: 95%;"></div>
+            <div class="card-divider"></div>
+            <h1 class="card-footer " style="background-color: #888; color:rgb(0, 123, 255);">3-Point Saddle</h1>
+        </div>
+    </div>
+    <i class="fa fa-adn" aria-hidden="true"></i>
+<i class="fa fa-assistive-listening-systems" aria-hidden="true"></i>
+        <!-- <div class="card" style="width: 90vw;">
+            <img src="static/blank.png" alt="Offset Image" class="card-img-top"style="width: 95%;">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's content.</p>
+            </div>
+            <div class="card-body bs-5 card">
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>
+        <div class="row-md-4">
+            <a href="{{ url_for('static', filename='custom.png') }}" style="width: 100%;">
+                <div class="tile">
+                    <div class="tile-image"> <img src="static/blank.png" alt="Offset Image">
+                    </div>
+                    <div class="tile-divider"></div>
+                    <h3 class="tile-title">Offset</h3>
+                </div>
+            </a>
+        </div>
+        <div class="row-md-4">
+            <a href="https://example.com/link2">
+                <div class="tile">
+                    <div class="tile-image"></div>
+                    <div class="tile-divider"></div>
+                    <h3 class="tile-title">Tile 2</h3>
+                </div>
+            </a>
+        </div>
+        <div class="row-md-4">
+            <a href="https://example.com/link3">
+                <div class="tile">
+                    <div class="tile-image"></div>
+                    <div class="tile-divider"></div>
+                    <h3 class="tile-title">Tile 3</h3>
+                </div>
+            </a>
+        </div>-->
+ 
+
+
+{% endblock %}

@@ -330,13 +330,7 @@
         display: block;
     }
 
-    @media (min-width: 768px) {
-        .d-md-flex {
-            display: -webkit-box !important;
-            display: -ms-flexbox !important;
-            display: flex;
-        }
-    }
+
 
     .tablinks {
         display: flex;
@@ -394,7 +388,7 @@
             color: #000;
             background-color: #fff;
             border: 1px solid;
-            width: fit-content;
+            width: -mozfit-content;
             padding: 3px;
             font-size: 18px;
         }
@@ -435,10 +429,10 @@
                     class="material-symbols-outlined">save</span> Save Material
                 List </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ url_for("view_projects") }}"><span
+            <a class="dropdown-item" href="{{ url_for('view_projects') }}"><span
                     class="material-symbols-outlined">rocket</span> View
                 Projects </a>
-            <a class="dropdown-item" href="{{ url_for("home") }}"><span class="material-symbols-outlined">home</span>
+            <a class="dropdown-item" href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span>
                 Home </a>
             <a class="dropdown-item" style="color: red" href="javascript:void(0);"
                 onclick="deleteProject({{ project_id }})">
@@ -517,12 +511,11 @@
         </table>
     </div>
     <!-- To-do tab -->
-    <div id="todo_list" class="tabcontent">
+    <div id="todo_list" class="tabcontent active">
         <h2 class="mx-auto w3-center" style="margin: 0 auto; color:green;">{{ project.name }} Materials</h2>
 
         <div class="container-lg">
-            {% for container_name, container_percentage in
-            container_average.items() %}
+            {% for container_name, container_percentage in container_average.items() %}
             <div>
                 <div id="{{ container_name }} collapse-2" class="show" style="width:100%;">
                     <div id="accordion-1" class="accordion" role="tablist" style="width:100%;">
@@ -537,7 +530,7 @@
                                     border-bottom-color: rgb(42,130,157);
                                     border-left-width: 4px;
                                     border-left-color: rgb(42,130,157)">
-                            <h2 class="accordion-header" role="tab" style="width:100%;">
+                            <h2 class="accordion-header w3-centered" role="tab" style="width:100%;">
                                 <button
                                     class="collapsed accordion-button btn btn-primary d-md-flex justify-content-md-center"
                                     type="button" data-bs-toggle="collapse"
@@ -564,7 +557,7 @@
                                         <div class="card-header" style="border-bottom: 2px solid rgba(66,131,64,0.176)">
                                             <div class="row">
                                                 <div class="col-sm-7 col-md-5">
-                                                    <div class="fs-4" style="color: rgb(255,255,255);">
+                                                    <div class="fs-4 fs" style="color: rgb(255,255,255);">
                                                         {{
                                                         container_name }}:
                                                     </div>
@@ -608,44 +601,35 @@
                                                     container_name %}
                                                     {% set task = task_info %}
                                                 </span>
-                                                <div class="row">
-                                                    <div class="col d-xl-flex justify-content-xl-end">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            title="{{ task_info['tooltip'] }}"
-                                                            style="margin:0 auto; background-color: #3e3d3d;">
-                                                            {{ task_name
-                                                            }}
-                                                        </button>
-                                                        {# <abbr title="{{ task.tooltip }}" tabindex="0">{{ task_name
-                                                            }}</abbr> #}
-                                                    </div>
-                                                    <div class="col">
-                                                        <input class="form-control-sm" type="number"
-                                                            name="progress_{{ task_name }}"
-                                                            value="{{ task_info['current_progress'] }}" style="width: 80px;
-                                                                          background: #222;
-                                                                          color: #d76c1f;
-                                                                          font:x-large">
-                                                        <div class="form-label" style="font-size: 14px;">
-                                                            &nbsp;Out
-                                                            of {{ math.trunc(task_info['target_quantity'])
-                                                            }}
+                                                <div class="row justify-content-end" style="margin:10px; font-size: clamp(12px, 2.5vw, 24px);">
+                                                    
+                                                    <div class="col-md-10">
+                                                        <div class="d-flex justify-content-end align-items-center">
+                                                            <a style="color:white; font-size: 1.2rem; " title="{{ task.tooltip }}" tabindex="0">{{ task_name }}</a>
+
+                                                            <input class="form-control-sm" type="number"
+                                                                name="progress_{{ task_name }}"
+                                                                value="{{ task_info['current_progress'] }}" style="width: 80px;
+                                                                  background: #222;
+                                                                  color: #d76c1f;
+                                                                  font: x-large;">
+                                                            <div class="form-label" style="font-size: 14px; white-space: nowrap;">
+                                                                &nbsp;Out of {{ math.trunc(task_info['target_quantity']) }}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col">
+                                                    <div class="col-md-2">
                                                         <div class="progress">
                                                             <div class="progress-bar bg-success progress-bar-animated"
                                                                 aria-valuenow="{{ calculate_progress_percentage(task_info['current_progress'], task_info['target_quantity']) }}"
                                                                 aria-valuemin="0" aria-valuemax="100"
                                                                 style="width: {{ calculate_progress_percentage(task_info['current_progress'], task_info['target_quantity']) }}%">
-                                                                {{
-                                                                calculate_progress_percentage(task_info['current_progress'],task_info['target_quantity'])
-                                                                }}%
+                                                                {{ calculate_progress_percentage(task_info['current_progress'], task_info['target_quantity']) }}%
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                
                                                 {% endfor %}
                                             </div>
                                             <button id="progressButton"
@@ -658,11 +642,12 @@
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
+
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
