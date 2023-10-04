@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    /* Center the form horizontally and add some spacing */
+    .bend {
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    .diagram-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .diagram-container img {
+        width: 100%;
+        height: auto;
+    }
+
+
+    .offset-depth {
+        position: absolute;
+        top: 27%;
+        left: 51%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw;
+        /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #858484;
+        /* Adjust the background color and opacity as desired */
+
+    }
+
+    .offset-angle {
+        position: absolute;
+        top: 40%;
+        left: 27%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw;
+        /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333;
+        /* Adjust the background color and opacity as desired */
+
+    }
+
+    .offset-distance {
+        position: absolute;
+        top: 10%;
+        left: 18%;
+        transform: translate(-50%, -50%);
+        transform: rotate(-45deg);
+        font-size: 3.4vw;
+        /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333;
+        /* Adjust the background color and opacity as desired */
+        margin-bottom: 1px;
+    }
+
+    .conduit_shrinkage {
+        position: absolute;
+        top: 54%;
+        left: 94%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw;
+        /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333;
+        /* Adjust the background color and opacity as desired */
+
+    }
+
+    p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 2.5vw;
+        /* Adjust this value to control the font size */
+    }
+
+    .image-container {
+        position: relative;
+        width: 80%;
+        height: 100px;
+        /* Set the height of the container to match your design */
+    }
+
+    .image-mark {
+        position: absolute;
+    }
+
+    .benders {
+        position: absolute;
+        top: 66%;
+    }
+
+    .distance {
+        position: absolute;
+        top: 88%;
+        color: rgb(43, 204, 91);
+    }
+    .benders_up {
+        position: absolute;
+        top: 80%;
+    }
+
+    .distance_up {
+        position: absolute;
+        top: 72%;
+        color: rgb(43, 204, 91);
+    }
+
+    .offset_width_rounded {
+        position: absolute;
+        top: 45%;
+        left: 45%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw;
+        /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #858484;        /* Adjust the background color and opacity as desired */
+
+    }
+
+    .distance_to_object {
+        position: absolute;
+        top: 53%;
+        left: 20%;
+        transform: translate(-50%, -50%);
+        font-size: 3.4vw;
+        /* Adjust this value to control the font size */
+        color: rgb(43, 204, 91);
+        background-color: #333;
+        /* Adjust the background color and opacity as desired */
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="w3-main" style="background-color: #333; color:white; width:100vw;">
+    <div class="dropdown">
+        <button class="btn btn-bar dropdown-toggle" type="button" id="menu1" data-toggle="dropdown"
+            style="width:95vw; background-color: #4e4e4e; color: white; ; border: 3px grey solid; border-bottom: 2px rgb(0, 87, 128) solid; margin:10px;">Bend
+            Options
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1"
+            style="width:100vw; background-color: #4e4e4e; color: white;">
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1"
+                    href="{{ url_for('offset') }}">Offset</a></li>
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1" href="{{ url_for('four_point_saddle') }}">4-point Saddle</a></li>
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1" href="{{ url_for('three_point_saddle') }}">3-point Saddle</a></li>
+            <li role="presentation" style="color: rgb(53, 105, 184);" class="divider"></li>
+            <li role="presentation"><a style="color: white;" role="menuitem" tabindex="-1"
+                    href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a></li>
+        </ul>
+    </div>
+
+    <form method="POST" action="/4-point-saddle">
+        <h2>4-Point Saddle</h2>
+        <div class="row justify-content-center align-items-center g-2 mar" style="margin:5px;">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="depth">Offset Height</label>
+                    <select class="form-select form-select-lg" name="rise" id="depth" style="background-color: #222; color: whitesmoke; border: rgb(20, 148, 20) 1px solid">
+                        <option selected>Offset Height</option>
+                        {% for i in range(0, 201, 1) %}
+                        <option value="{{ i/4 }}">{{ i/4 }}"</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="degree">Offset Angle</label>
+                    <select class="form-select form-select-lg" name="offset_angle" id="degree" style="background-color: #222; color: whitesmoke;border: rgb(185, 201, 45) 1px solid">
+                        <option selected>Offset Angle</option>
+                        <option value="10">10°</option>
+                        <option value="22.5">22.5°</option>
+                        <option value="30">30°</option>
+                        <option value="45">45°</option>
+                        <option value="60">60°</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center g-2 mar" style="margin:5px;">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="object_distance">Distance To Object</label>
+                    <select class="form-select form-select-lg" name="object_distance" id="object_distance" style="background-color: #222; color: whitesmoke;border: rgb(233, 156, 13) 1px solid">
+                        <option selected>Distance To Object</option>
+                        {% for i in range(0, 201, 1) %}
+                        <option value="{{ i/4 }}">{{ i/4 }}"</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="object_width">Width of Object</label>
+                    <select class="form-select form-select-lg" name="object_width" id="object_width" style="background-color: #222; color: whitesmoke; border: rgb(20, 148, 148) 1px solid">
+                        <option selected>Width of Object</option>
+                        {% for i in range(0, 201, 1) %}
+                        <option value="{{ i/4 }}">{{ i/4 }}"</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    
+        <div class="diagram-container w3-responsive">
+            <img src="{{ url_for('static', filename=picture) }}" alt="">
+
+            <span class="distance_up" style="left: 2%;">0"</span>
+            <img class="benders_up" src="{{ url_for('static', filename=picture3) }}" alt=""
+                style="width:10%;left: {{ first }}%;">
+            <span class="distance_up" style="left: {{ first + 4}}%;">{{mark1}}</span>
+
+            <img class="benders" src="{{ url_for('static', filename=picture2) }}" alt=""
+                style="width:10%;left: {{ second }}%;">
+            <span class="distance" style="left: {{ second + 4}}%;">{{mark2}}</span>
+
+            <img class="benders" src="{{ url_for('static', filename=picture1) }}" alt= "" style="width:10%;left: {{ third }}%;">
+            <span class="distance" style="left: {{ third + 4}}%;">{{mark3}}</span>
+
+            <img class="benders_up" src="{{ url_for('static', filename=picture4) }}" alt=""
+                style="width:10%;left: {{ fourth }}%;">
+            <span class="distance_up" style="left: {{ fourth + 4 }}%;">{{mark4}}</span>
+            <br>
+
+
+            <span class="offset-depth" style="margin-top: 10px; color: rgb(233, 156, 13);">{{ rise }}</span>
+            <span class="offset-angle" style="color: rgb(233, 156, 13);">{{ offset_angle }}</span>
+            <span class="offset-distance">{{ distance_between_bends }}</span>
+            <span class="conduit_shrinkage">-{{ conduit_shrinkage }}</span>
+            <span class="offset_width_rounded" style="color: rgb(233, 156, 13);">{{ offset_width }}</span>
+            <span class="distance_to_object" style="color: rgb(233, 156, 13);">{{ object_distance }}</span>
+
+
+
+        </div>
+
+
+
+        <!-- return render_template('4_point_saddle.html', picture=picture, offset_angle=degree, Fraction=Fraction,
+                               rise=rise_rounded, distance_between_bends=distance_rounded, conduit_shrinkage=shrinkage_rounded,
+                               offset_width=offset_width_rounded, math=math)
+    offset_angle = 0 -->
+
+
+
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Offset Height: {{ rise | safe}}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Offset Angle: {{ offset_angle }}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Distance Between Marks on Pipe: {{
+            distance_between_bends | safe}}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Conduit Shrinkage: {{ offset_width | safe}}
+        </p>
+     
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">First mark: {{ first_mark | safe}}</p>
+       
+
+        <button type="submit" name="offset" id="offset" class="btn btn-primary">Submit</button>
+
+        <!-- <input type="submit" value="Calculate"> -->
+    </form>
+
+</div>
+<script>
+
+
+
+    // Get all input elements on the page
+    var inputElements = document.querySelectorAll('input, select, textarea');
+
+    // Loop through each input element
+    inputElements.forEach(function (element) {
+        // Check if a value is already stored in local storage for the specific input element
+        if (localStorage.getItem(element.id)) {
+            // Set the input element's value to the stored value
+            element.value = localStorage.getItem(element.id);
+        }
+
+        // Listen for changes in the input element
+        element.addEventListener('change', function () {
+            // Store the input element's value in local storage
+            localStorage.setItem(element.id, element.value);
+        });
+    });
+</script>
+
+   
+{% endblock %}

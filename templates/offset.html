@@ -98,7 +98,7 @@
         <div class="row justify-content-center align-items-center g-2 mar" style="margin:5px;">
             <div class="col">
                 <div class="mb-3">
-                    <select class="form-select form-select-lg" name="offset_depth" id="depth" style="background-color: #222; color: grey;">
+                    <select class="form-select form-select-lg" name="rise" id="depth" style="background-color: #222; color: grey;">
                         <option selected>Offset Height</option>
                         {% for i in range(0, 201, 1) %}
                             <option value="{{ i/4 }}">{{ i/4 }}"</option>
@@ -124,7 +124,7 @@
         <div class="diagram-container w3-responsive" >
             <img src="{{ url_for('static', filename=picture) }}" alt="Offset Image">
  
-            <span class="offset-depth">{{ offset_depth }}</span>
+            <span class="offset-depth">{{ rise }}</span>
             <span class="offset-angle">{{ offset_angle }}</span>
             <span class="offset-distance">{{ distance_between_bends }}</span>
             <span class="conduit_shrinkage">{{ conduit_shrinkage }}</span>
@@ -135,11 +135,11 @@
 
 
 
-        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Rise: {{ offset_depth | safe}}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Rise: {{ rise | safe}}</p>
         <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Offset Angle: {{ offset_angle }}</p>
         <p style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Distance Between Marks on Pipe: {{ distance_between_bends | safe}}</p>
         <p  style="font-family: 'Open Sans', sans-serif;font-size: larger; ">Conduit Shrinkage: {{ conduit_shrinkage | safe}}</p>
-        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; "                    >{{ offset_depth_mixed | safe}}</p>
+        <p style="font-family: 'Open Sans', sans-serif;font-size: larger; "                    >{{ rise_mixed | safe}}</p>
 
       
         <button type="submit" name="offset" id="offset" class="btn btn-primary">Submit</button>

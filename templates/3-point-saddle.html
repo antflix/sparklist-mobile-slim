@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMT Conduit Bend Calculator</title>
+</head>
+<body>
+    <h1>EMT Conduit Bend Calculator</h1>
+    <form method="POST">
+        <label for="obstacle_height">Height of Obstacle (in inches):</label>
+        <input type="number" name="obstacle_height" required><br><br>
+
+        <label for="distance_to_center">Distance to Center (in inches):</label>
+        <input type="number" name="distance_to_center" required><br><br>
+
+        <label for="bend_type">Select Bend Type:</label>
+        <select name="bend_type">
+            <option value="22.5">22.5 degrees</option>
+            <option value="30">30 degrees</option>
+        </select><br><br>
+
+        <input type="submit" value="Calculate">
+    </form>
+
+    {% if result %}
+    <h2>Instructions:</h2>
+    <pre>{{ result }}</pre>
+    {% endif %}
+</body>
+</html>

@@ -121,34 +121,255 @@ def offset():
         else:
             offset_angle = offset_angle      
 
-        offset_depth = float(request.form['offset_depth'])  # User-provided offset depth
-        shrinkage = offset_depth * math.tan(offset_angle)
+        rise = float(request.form['rise'])  # User-provided offset depth
+        shrinkage = rise * math.tan(offset_angle)
         
         if offset_angle in degree_multipliers:
-            offset_depth_multiplier = degree_multipliers[offset_angle]
-            distance = offset_depth_multiplier * offset_depth
+            rise_multiplier = degree_multipliers[offset_angle]
+            distance = rise_multiplier * rise
         else:
             # Handle cases where the offset angle is not in the dictionary
-            offset_depth = None  # You can define a default value or handle it differently
+            rise = None  # You can define a default value or handle it differently
 
         if offset_angle in shrinkage_rates:
             shrinkage_rate = shrinkage_rates[offset_angle]
-            shrinkage = offset_depth * shrinkage_rate
+            shrinkage = rise * shrinkage_rate
         else:
             # Handle cases where the offset angle is not in the dictionary
             shrinkage = None  # You can define a default value or handle it differently
 
         # Round decimal values to 1/8th inch increments and convert to mixed fractions
-        offset_depth_rounded= decimal_to_mixed_fraction(round_to_eighth(offset_depth))
+        rise_rounded= decimal_to_mixed_fraction(round_to_eighth(rise))
         distance_rounded = decimal_to_mixed_fraction(round_to_eighth(distance))
         shrinkage_rounded = decimal_to_mixed_fraction(round_to_eighth(shrinkage))
         degree = f"{offset_angle}°"
 
         return render_template('offset.html', picture=picture, offset_angle=degree, Fraction=Fraction,
-                               offset_depth=offset_depth_rounded, distance_between_bends=distance_rounded, conduit_shrinkage=shrinkage_rounded,
+                               rise=rise_rounded, distance_between_bends=distance_rounded, conduit_shrinkage=shrinkage_rounded,
                                math=math)
-    offset_depth_mixed = None
-    return render_template('offset.html', picture=picture, math=math, offset_depth_mixed=offset_depth_mixed)
+    return render_template('offset.html', picture=picture, math=math)
+
+
+@app.route('/4-point-saddle', methods=['GET', 'POST'])
+def four_point_saddle():
+    picture='4-point-labeled-object.png'
+    
+    if request.method == 'POST':
+        picture='4point.png'
+        picture1='face_left_bender.png'
+        picture2='face_right_bender.png'
+        picture3='up_face_right.png'
+        picture4='up_face_left.png'
+        # Define a dictionary of degree multipliers
+        degree_multipliers = {
+            10: 5.75,
+            22.5: 2.61,
+            30: 2.0,
+            45: 1.41,
+            60: 1.16
+        }
+        shrinkage_rates = {
+            10: .08,
+            15: .13,
+            22.5: .2,
+            30: .27,
+            45:.41,
+            60: .58
+        }
+
+        offset_angle = float(request.form['offset_angle'])
+        distance_to_object = float(request.form['object_distance'])
+        object_width = float(request.form['object_width'])  # User-provided offset width
+        rise = float(request.form['rise'])  # User-provided offset depth
+
+
+        # Get the selected degree from the form
+        if offset_angle != 22.5:
+            offset_angle = int(request.form['offset_angle'])
+
+        else:
+            offset_angle = offset_angle      
+
+        shrinkage = rise * math.tan(offset_angle)
+        
+        if offset_angle in degree_multipliers:
+            rise_multiplier = degree_multipliers[offset_angle]
+            distance = rise_multiplier * rise
+        else:
+            # Handle cases where the offset angle is not in the dictionary
+            rise = None  # You can define a default value or handle it differently
+
+        if offset_angle in shrinkage_rates:
+            shrinkage_rate = shrinkage_rates[offset_angle]
+            shrinkage = rise * shrinkage_rate
+        else:
+            # Handle cases where the offset angle is not in the dictionary
+            shrinkage = None  # You can define a default value or handle it differently
+
+        # Round decimal values to 1/8th inch increments and convert to mixed fractions
+        distance_to_first_mark = (distance_to_object - distance) + shrinkage
+        distance_to_first_mark_rounded = decimal_to_mixed_fraction(round_to_eighth(distance_to_first_mark))
+        rise_rounded= decimal_to_mixed_fraction(round_to_eighth(rise))
+        distance_rounded = decimal_to_mixed_fraction(round_to_eighth(distance))
+        shrinkage_rounded = decimal_to_mixed_fraction(round_to_eighth(shrinkage))
+        offset_width_rounded = decimal_to_mixed_fraction(round_to_eighth(object_width))
+        degree = f"{offset_angle}°"
+
+        first_to_second = distance_to_first_mark + distance
+        second_to_third = first_to_second + object_width
+        third_to_fourth = second_to_third + distance
+
+        mark1 = distance_to_first_mark_rounded
+        mark2 = decimal_to_mixed_fraction(round_to_eighth(first_to_second))
+        mark3 = decimal_to_mixed_fraction(round_to_eighth(second_to_third))
+        mark4 = decimal_to_mixed_fraction(round_to_eighth(third_to_fourth))
+        object_distance=decimal_to_mixed_fraction(round_to_eighth(distance_to_object))
+        whole_percent = third_to_fourth + (third_to_fourth * .30)
+        first_mark_percent = (distance_to_first_mark / whole_percent) * 100
+        second_percent = (first_to_second / whole_percent) * 100
+        third_percent = (second_to_third / whole_percent) * 100
+        fourth_percent = (third_to_fourth / whole_percent) * 100
+
+         
+
+            
+
+       
+        
+        return render_template('4-point-saddle.html', mark1=mark1, mark2=mark2, mark3=mark3, mark4=mark4, object_distance=object_distance, picture=picture, picture1=picture1, picture2=picture2, picture3=picture3,picture4=picture4, offset_angle=degree, first=first_mark_percent, second=second_percent, third=third_percent, fourth=fourth_percent, Fraction=Fraction,
+                               rise=rise_rounded, distance_between_bends=distance_rounded, conduit_shrinkage=shrinkage_rounded, distance_to_object=distance_to_object,
+                               offset_width=offset_width_rounded, math=math, first_mark=distance_to_first_mark_rounded, first_to_second=first_to_second, second_to_third=second_to_third, third_to_fourth=third_to_fourth)
+    first_mark_percent=1
+    second_percent=1
+    third_percent=1
+    fourth_percent=1
+    return render_template('4-point-saddle.html',first=first_mark_percent, second=second_percent, third=third_percent, fourth=fourth_percent, picture=picture)
+
+
+@app.route('/3-point-saddle', methods=['GET', 'POST'])
+def three_point_saddle():
+
+    if request.method == 'POST':
+        # Get user input
+        obstacle_height = float(request.form['obstacle_height'])
+        distance_to_center = float(request.form['distance_to_center'])
+        bend_type = request.form['bend_type']
+
+        # Calculate the bending angles based on the chosen bend type
+        if bend_type == '22.5':
+            first_bend_angle = 22.5
+        elif bend_type == '30':
+            first_bend_angle = 30
+        else:
+            return "Invalid bend type selected."
+
+        # Calculate distances to the first, second, and third bends
+        distance_to_first_bend = obstacle_height / math.tan(math.radians(first_bend_angle))
+        distance_to_second_bend = distance_to_center - (distance_to_first_bend / 2)
+        distance_to_third_bend = distance_to_center + (distance_to_first_bend / 2)
+
+        # Generate a description of how to bend the pipe
+        bend_description = f"To offset over an obstacle {obstacle_height} inches high, with the center of the object {distance_to_center} inches from the last piece of pipe, using a {first_bend_angle}-degree bend, follow these steps:\n\n"
+        bend_description += f"1. Measure {distance_to_first_bend} inches from the end of the conduit and make your first bend at a {first_bend_angle}-degree angle.\n"
+        bend_description += f"2. Measure {distance_to_second_bend} inches from the first bend and make a 90-degree (right) bend.\n"
+        bend_description += f"3. Measure {distance_to_third_bend} inches from the second bend and make your final bend at a {first_bend_angle}-degree angle.\n"
+
+        return bend_description
+
+    return render_template('3-point-saddle.html')
+#     picture='3-point-labeled.png'
+    
+#     if request.method == 'POST':
+#         picture='3point-saddle.png'
+#         picture1='face_left_bender.png'
+#         picture2='face_right_bender.png'
+#         picture3='up_face_right.png'
+#         picture4='up_face_left.png'
+#         # Define a dictionary of degree multipliers
+#         degree_multipliers = {
+#             10: 5.75,
+#             22.5: 2.61,
+#             30: 2.0,
+#             45: 1.41,
+#             60: 1.16
+#         }
+#         shrinkage_rates = {
+#             10: .08,
+#             15: .13,
+#             22.5: .2,
+#             30: .27,
+#             45:.41,
+#             60: .58
+#         }
+
+#         offset_angle = float(request.form['offset_angle'])
+#         distance_to_object = float(request.form['object_distance'])
+#         object_width = float(request.form['object_width'])  # User-provided offset width
+#         rise = float(request.form['rise'])  # User-provided offset depth
+
+
+#         # Get the selected degree from the form
+#         if offset_angle != 22.5:
+#             offset_angle = int(request.form['offset_angle'])
+
+#         else:
+#             offset_angle = offset_angle      
+
+#         shrinkage = rise * math.tan(offset_angle)
+        
+#         if offset_angle in degree_multipliers:
+#             rise_multiplier = degree_multipliers[offset_angle]
+#             distance = rise_multiplier * rise
+#         else:
+#             # Handle cases where the offset angle is not in the dictionary
+#             rise = None  # You can define a default value or handle it differently
+
+#         if offset_angle in shrinkage_rates:
+#             shrinkage_rate = shrinkage_rates[offset_angle]
+#             shrinkage = rise * shrinkage_rate
+#         else:
+#             # Handle cases where the offset angle is not in the dictionary
+#             shrinkage = None  # You can define a default value or handle it differently
+
+#         # Round decimal values to 1/8th inch increments and convert to mixed fractions
+#         distance_to_first_mark = (distance_to_object - distance) + shrinkage
+#         distance_to_first_mark_rounded = decimal_to_mixed_fraction(round_to_eighth(distance_to_first_mark))
+#         rise_rounded= decimal_to_mixed_fraction(round_to_eighth(rise))
+#         distance_rounded = decimal_to_mixed_fraction(round_to_eighth(distance))
+#         shrinkage_rounded = decimal_to_mixed_fraction(round_to_eighth(shrinkage))
+#         offset_width_rounded = decimal_to_mixed_fraction(round_to_eighth(object_width))
+#         degree = f"{offset_angle}°"
+
+#         first_to_second = distance_to_first_mark + distance
+#         second_to_third = first_to_second + object_width
+#         third_to_fourth = second_to_third + distance
+
+#         mark1 = distance_to_first_mark_rounded
+#         mark2 = decimal_to_mixed_fraction(round_to_eighth(first_to_second))
+#         mark3 = decimal_to_mixed_fraction(round_to_eighth(second_to_third))
+#         mark4 = decimal_to_mixed_fraction(round_to_eighth(third_to_fourth))
+#         object_distance=decimal_to_mixed_fraction(round_to_eighth(distance_to_object))
+#         whole_percent = third_to_fourth + (third_to_fourth * .30)
+#         first_mark_percent = (distance_to_first_mark / whole_percent) * 100
+#         second_percent = (first_to_second / whole_percent) * 100
+#         third_percent = (second_to_third / whole_percent) * 100
+#         fourth_percent = (third_to_fourth / whole_percent) * 100
+
+         
+
+            
+
+       
+        
+#         return render_template('3-point-saddle.html', mark1=mark1, mark2=mark2, mark3=mark3, mark4=mark4, object_distance=object_distance, picture=picture, picture1=picture1, picture2=picture2, picture3=picture3,picture4=picture4, offset_angle=degree, first=first_mark_percent, second=second_percent, third=third_percent, fourth=fourth_percent, Fraction=Fraction,
+#                                rise=rise_rounded, distance_between_bends=distance_rounded, conduit_shrinkage=shrinkage_rounded, distance_to_object=distance_to_object,
+#                                offset_width=offset_width_rounded, math=math, first_mark=distance_to_first_mark_rounded, first_to_second=first_to_second, second_to_third=second_to_third, third_to_fourth=third_to_fourth)
+#     first_mark_percent=1
+#     second_percent=1
+#     third_percent=1
+#     fourth_percent=1
+#     return render_template('3-point-saddle.html',first=first_mark_percent, second=second_percent, third=third_percent, fourth=fourth_percent, picture=picture)
+
 
 def round_to_eighth(number):
     rounded = round(number * 8) / 8
